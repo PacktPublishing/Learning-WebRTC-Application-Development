@@ -1,0 +1,87 @@
+<html>
+<head>
+<title>Peer Test</title>
+</head>
+
+
+<body>
+	<video id="localvideo" autoplay="autoplay"></video>
+	<video id="remotevideo" autoplay="autoplay"></video>
+	<div id="log"></div>
+
+	<script type="text/javascript">
+
+	var localvideo = document.getElementById("localvideo");
+	var remotevideo = document.getElementById("remotevideo");
+
+	function printlog(log) {
+		document.getElementById("log").innerHTML = document
+				.getElementById("log").innerHTML
+				+ log;
+	}
+	function error(err) {
+		printlog("Ooops! Got an error: " + err + "<br />");
+	}
+
+	var local_pc = new webkitRTCPeerConnection(null);
+	var remote_pc = new webkitRTCPeerConnection(null);
+	
+	function iceLocalCallback(event) {
+		if (event.candidate) {
+			remote_pc.addIceCandidate(new RTCIceCandidate(event.candidate));
+			printlog("Local ICE candidate: \n" + event.candidate.candidate);
+		}
+	}
+
+	function iceRemoteCallback(event) {
+		if (event.candidate) {
+			local_pc.addIceCandidate(new RTCIceCandidate(event.candidate));
+			printlog("Remote ICE candidate: \n "
+					+ event.candidate.candidate);
+		}
+	}
+	
+	local_pc.onicecandidate = iceLocalCallback;
+	local_pc.onaddstream = function(obj) {
+		printlog("LOCAL onAddStream called, source stream is ready for being transmitted! <br />");
+		localvideo.src = URL.createObjectURL(obj.stream);
+	}
+
+	remote_pc.onicecandidate = iceRemoteCallback;
+	remote_pc.onaddstream = function(obj) {
+		printlog("REMOTE onAddStream called, source stream is ready for being transmitted! <br />");
+		remotevideo.src = URL.createObjectURL(obj.stream);
+	}
+	
+	navigator.webkitGetUserMedia({video : true,audio : true},
+			function(stream) {
+				// Adding a local stream could not trigger the onaddstream callback
+				local_pc.addStream(stream);
+
+				remote_pc.addStream(stream);
+
+				local_pc.createOffer(function(offer) {
+						local_pc.setLocalDescription(new RTCSessionDescription(offer),
+							function() {
+								printlog("Ready for sending OFFER: <br />"+ JSON.stringify(offer).replace(/\\r\\n/g,"<br />"));
+								remote_pc.setRemoteDescription(new RTCSessionDescription(offer),
+									function() {
+										remote_pc.createAnswer(function(answer) {
+											remote_pc.setLocalDescription(new RTCSessionDescription(answer),
+													function() {
+														local_pc.setRemoteDescription(new RTCSessionDescription(answer),
+															function() {
+																printlog("All done!")},error);
+											},error);
+										},
+										error);
+									},
+								error);
+							}, error);
+						}, error);
+				}, error);
+</script>
+	
+</body>
+
+</html>

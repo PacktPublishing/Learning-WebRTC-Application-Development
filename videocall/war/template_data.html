@@ -1,0 +1,173 @@
+<html>
+<head>
+<title>DataChannel</title>
+
+<link rel="canonical" href="{{room_link}}"/>
+
+<script type="text/javascript" src="/_ah/channel/jsapi"></script>
+<script src="/js/main_data.js"></script>
+
+<style type="text/css">
+	html, body {
+	  background-color: #ffffff;
+
+	  font-family: Verdana, Arial, Helvetica, sans-serif;
+	}
+
+	body {
+
+
+	    font:12px arial;
+	    color: #222;
+	    text-align:center;
+	    padding:15px; }
+
+
+
+
+
+
+
+
+	  
+	form, p, span {
+	    margin:0;
+	    padding:0; }
+	  
+	input { font:12px arial; }
+
+
+
+
+	  
+	#wrapper, #loginform {
+	    margin:0 auto;
+	    padding-bottom:25px;
+	    background:#EBF4FB;
+	    width:504px;
+
+	    border:1px solid #ACD8F0; }
+
+
+
+	  
+	#loginform { padding-top:18px; }
+
+
+
+	  
+	#loginform p { margin: 5px; }
+
+
+	  
+	#chatbox {
+	    text-align:left;
+	    margin:0 auto;
+	    margin-bottom:25px;
+	    padding:10px;
+	    background:#fff;
+	    height:270px;
+	    width:430px;
+
+
+
+	    border:1px solid #ACD8F0;
+	    overflow:auto; }
+
+	  
+	#usermsg {
+	    width:395px;
+
+
+	    border:1px solid #ACD8F0; }
+
+	  
+	#submit { width: 60px; }
+
+
+	  
+	.error { color: #ff0000; }
+
+
+
+
+	  
+	#menu { padding:12.5px 25px 12.5px 25px; }
+
+
+
+
+
+
+
+
+	
+	#filesharing { padding:12.5px 25px 12.5px 25px; }
+	  
+	.welcome { float:left; }
+	  
+	.logout { float:right; }
+	  
+	.msgln { margin:0 0 2px 0; }  
+
+	
+	#console {
+	  position: relative;
+
+	  background-color: black;
+	  margin: 2px;
+	  height:200px;
+	  width:100%;
+	  opacity: 0.6;
+	  font-family: monospace;
+	  font-size: 12px;
+	  color: #ffffff;
+	  overflow:scroll;
+	  white-space: pre ; 
+	  display: block;
+	  margin-top: 50px;
+	  text-align:left;
+	  padding: 10px;
+	  border: 3px solid blue;
+	}  
+</style>
+
+</head>
+
+<body>
+<script type="text/javascript">
+  var channelToken = '{{token}}';
+  var me = '{{me}}';
+  var roomKey = '{{room_key}}';
+  var roomLink = '{{room_link}}';
+  var initiator = {{initiator}};
+  var pcConfig = {{pc_config}};
+  var mediaConstraints = {};
+  var dataConstraints = {};
+  setTimeout(initialize, 1);
+</script>
+
+<div id="wrapper">
+    <div id="menu">
+
+        <p class="welcome">Welcome, <b><script type="text/javascript">document.write(me);</script>!</b></p>
+        <p class="logout"><a id="exit" href="#" onClick="onExit()">Exit Chat</a></p>
+        <div style="clear:both"></div>
+    </div>
+    
+    <div id="chatbox"><p>Waiting for the other participant..</p></div>
+	
+    <input name="usermsg" type="text" id="usermsg" size="63" disabled onkeydown="if (event.keyCode == 13) { sendChatMessage(); return false; }" />
+    <input name="submitmsg" type="submit"  id="submitmsg" value="Send" disabled onClick="sendChatMessage()" />
+    <div id="filesharing" style="text-align: left;">
+    	<b>Select a file to send to remote participant [Transfer will start automatically]:</b><br />
+    	<input type="file" id="file" disabled />
+    </div>
+    
+</div>
+
+<div id="console"></div>
+
+</body>
+
+</html>

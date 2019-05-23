@@ -1,0 +1,31 @@
+<html>
+
+<head><title>Test</title></head>
+
+
+<body>
+
+<video id="webcam" autoplay="autoplay"></video>
+
+
+<script type="text/javascript">
+try {
+	navigator.webkitGetUserMedia({
+		video: true,
+		audio: false
+	}, function (stream){
+			document.getElementById('webcam').src=URL.createObjectURL(stream);
+		}, 
+		function(){
+			alert('Failed to get access to local media. Maybe do you deny access?');
+	});
+} catch (e) {
+	alert("Can't get user's media access!");
+}
+
+</script>
+
+
+
+</body>
+</html>

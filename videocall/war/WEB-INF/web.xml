@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+  
+	<servlet>
+		<servlet-name>MainServlet</servlet-name>
+		<servlet-class>it.alexworld.videocall.MainServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MainServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DataServlet</servlet-name>
+		<servlet-class>it.alexworld.videocall.DataServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DataServlet</servlet-name>
+		<url-pattern>/data</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DisconnectPage</servlet-name>
+		<servlet-class>it.alexworld.videocall.DisconnectPage</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DisconnectPage</servlet-name>
+		<url-pattern>/_ah/channel/disconnected/</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+		<servlet-name>MessagePage</servlet-name>
+		<servlet-class>it.alexworld.videocall.MessagePage</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MessagePage</servlet-name>
+		<url-pattern>/message</url-pattern>
+	</servlet-mapping>
+	
+  <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+  
+</web-app>

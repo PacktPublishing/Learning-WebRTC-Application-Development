@@ -1,0 +1,161 @@
+<html>
+<head>
+<title>PeerJS</title>
+
+<link rel="canonical" href="{{room_link}}"/>
+
+<style type="text/css">
+	html, body {
+	  background-color: #ffffff;
+	  height: 100%;
+	  font-family: Verdana, Arial, Helvetica, sans-serif;
+	}
+	body {
+	  margin: 0;
+	  padding: 0;
+	}
+	#buttonContainer {
+	  position: absolute;
+	  bottom: 0;
+	  width: 100%;
+	  height: 28px;
+	  font-size: 13px; font-weight: bold;
+	  line-height: 28px;
+	  text-align: center;
+	}
+	#container {
+	  background-color: #FFFFFF;
+	  position: absolute;
+	  height: 100%;
+	  width: 100%;
+	  margin: 0px auto;
+	}
+	#local {
+	  position: absolute;
+	  width: 100%;
+	}
+	#remote {
+	  position: absolute;
+	  width: 100%;
+	}
+	#mini {
+	  position: absolute;
+	  height: 30%;
+	  width: 30%;
+	  bottom: 32px;
+	  right: 4px;
+	  opacity: 1.0;
+	}
+	#localVideo {
+	  width: 100%;
+	  height: 100%;
+	  opacity: 1;
+	}
+	#remoteVideo {
+	  width: 100%;
+	  height: 100%;
+	  opacity: 1;
+	}
+	#miniVideo {
+	  width: 100%;
+	  height: 100%;
+	  opacity: 1;
+	}
+	#hangup {
+	 font-size: 13px; font-weight: bold;
+	 color: #FFFFFF;
+	 width: 128px;
+	 height: 24px;
+	 background-color: #398eb5;
+	 border-style: solid;
+	 border-color: #FFFFFF;
+	 margin: 2px;
+	}
+	#console {
+	  position: relative;
+	  float: left;
+	  background-color: black;
+	  margin: 2px;
+	  height:100%;
+	  width:400px;
+	  opacity: 0.6;
+	  font-family: monospace;
+	  font-size: 12px;
+	  color: #ffffff;
+	  overflow:scroll;
+	  white-space: pre ; 
+	  display: block;
+	}
+</style>
+<script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
+
+</head>
+
+<body>
+<div id="container">
+    <div id="remote">
+            <video id="remoteVideo" autoplay="autoplay"></video>
+      	<div id="mini">
+		        	<video id="miniVideo" autoplay="autoplay" muted="true"/>
+      	</div>
+    </div>
+</div>
+<div id="console"></div>
+
+<script type="text/javascript">
+
+function parseGetValue(val) {
+    var result = "Not found",
+        tmp = [];
+    var items = location.search.substr(1).split("&");
+    for (var index = 0; index < items.length; index++) {
+        tmp = items[index].split("=");
+        if (tmp[0] === val) result = decodeURIComponent(tmp[1]);
+    }
+    return result;
+}
+
+function logThis(log){
+	console.log(log);
+	var consoleDiv = document.getElementById('console');
+	consoleDiv.innerHTML = consoleDiv.innerHTML + '\n' + log;
+	consoleDiv.scrollTop = consoleDiv.scrollHeight;
+}
+
+var myMediaStream;
+miniVideo = document.getElementById('miniVideo');
+remoteVideo = document.getElementById('remoteVideo');
+
+try {
+	// Request the media passing the constraints (in our case are defined in template.html, video and audio set: true!)
+	// We define also two callback in case of Error or Success (go ahead to see what this callback will do)
+	navigator.webkitGetUserMedia( {"audio":true,"video":true}, function mediaSuccess(stream) {
+		myMediaStream=stream;
+		miniVideo.src = URL.createObjectURL(myMediaStream);
+		var remoteID = parseGetValue("id");
+		logThis('Remote peer ID is: ' + remoteID);
+
+		var peer = new Peer({key: 'lwjd5qra8257b9', debug: 3});
+		peer.on('open', function(id) { 
+				logThis('My peer ID is: ' + id);
+				//Call a peer, providing our mediaStream
+				var call = peer.call(remoteID, myMediaStream);
+
+				call.on('stream', function(stream) {
+					  remoteVideo.src = URL.createObjectURL(stream);
+				});
+		});
+
+	}, function (){});
+} catch (e) {
+	logThis('getUserMedia failed with exception: ' + e.message);
+	alert('getUserMedia() failed. Is this a WebRTC capable browser?');
+}
+
+
+
+</script>
+
+</body>
+
+</html>

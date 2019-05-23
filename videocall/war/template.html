@@ -1,0 +1,123 @@
+<html>
+<head>
+<title>VideoCall</title>
+
+<link rel="canonical" href="{{room_link}}"/>
+
+<script type="text/javascript" src="/_ah/channel/jsapi"></script>
+<script src="/js/main.js"></script>
+
+<style type="text/css">
+	html, body {
+	  background-color: #ffffff;
+	  height: 100%;
+	  font-family: Verdana, Arial, Helvetica, sans-serif;
+	}
+	body {
+	  margin: 0;
+	  padding: 0;
+	}
+	#buttonContainer {
+	  position: absolute;
+	  bottom: 0;
+	  width: 100%;
+	  height: 28px;
+	  font-size: 13px; font-weight: bold;
+	  line-height: 28px;
+	  text-align: center;
+	}
+	#container {
+	  background-color: #FFFFFF;
+	  position: absolute;
+	  height: 100%;
+	  width: 100%;
+	  margin: 0px auto;
+	}
+	#local {
+	  position: absolute;
+	  width: 100%;
+	}
+	#remote {
+	  position: absolute;
+	  width: 100%;
+	}
+	#mini {
+	  position: absolute;
+	  height: 30%;
+	  width: 30%;
+	  bottom: 32px;
+	  right: 4px;
+	  opacity: 1.0;
+	}
+	#localVideo {
+	  width: 100%;
+	  height: 100%;
+	  opacity: 0;
+	}
+	#remoteVideo {
+	  width: 100%;
+	  height: 100%;
+	  opacity: 0;
+	}
+	#miniVideo {
+	  width: 100%;
+	  height: 100%;
+	  opacity: 0;
+	}
+	#hangup {
+	 font-size: 13px; font-weight: bold;
+	 color: #FFFFFF;
+	 width: 128px;
+	 height: 24px;
+	 background-color: #398eb5;
+	 border-style: solid;
+	 border-color: #FFFFFF;
+	 margin: 2px;
+	}
+	#console {
+	  position: relative;
+	  float: left;
+	  background-color: black;
+	  margin: 2px;
+	  height:100%;
+	  width:400px;
+	  opacity: 0.6;
+	  font-family: monospace;
+	  font-size: 12px;
+	  color: #ffffff;
+	  overflow:scroll;
+	  white-space: pre ; 
+	  display: block;
+	}
+</style>
+
+</head>
+
+<body>
+<script type="text/javascript">
+  var channelToken = '{{token}}';
+  var me = '{{me}}';
+  var roomKey = '{{room_key}}';
+  var roomLink = '{{room_link}}';
+  var initiator = {{initiator}};
+  var pcConfig = {{pc_config}};
+  var mediaConstraints = {"audio":true,"video":true}; 
+  setTimeout(initialize, 1);
+</script>
+<div id="container">
+    <div id="local">
+		      <video id="localVideo" autoplay="autoplay" muted="true"/>
+    </div>
+    <div id="remote">
+            <video id="remoteVideo" autoplay="autoplay"></video>
+      	<div id="mini">
+		        	<video id="miniVideo" autoplay="autoplay" muted="true"/>
+      	</div>
+    </div>
+</div>
+<div id="buttonContainer"></div>
+<div id="console"></div>
+
+</body>
+
+</html>
